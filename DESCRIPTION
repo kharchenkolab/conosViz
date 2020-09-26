@@ -1,17 +1,21 @@
 Package: conosViz
-Title: Conos Shiny App to Visualize Dendrograms and Heatmaps
+Title: Shiny App to Visualize Conos Dendrograms and Heatmaps
 Version: 0.1.0
 Authors@R: 
     c(person("Viktor","Petukhov", email="viktor.s.petuhov@ya.ru", role="aut"), person("Evan","Biederstedt", email="evan.biederstedt@gmail.com", role=c("aut", "cre")))
-Description: What the package does (one paragraph).
+Description: Shiny application to interactively visualize Conos structures. Users can visualize dendrograms of the hierarchical community structure of clusters calculated from walktrap clustering. Interactive heatmaps allow users to explore the composition of clusters, similarity of the cluster compositions, and related tSNE plots.
 Depends: R (>= 3.2.1), Matrix, igraph
-License: GPL3 + file LICENSE
+License: GPL3
 biocViews:
 Imports:
     conos,
     d3heatmap,
+    dendextend,
+    ggplot2,
+    shiny,
     shinycssloaders
 Remotes:
+    rstudio/d3heatmap,
     kharchenkolab/conos
 Encoding: UTF-8
 LazyData: true
