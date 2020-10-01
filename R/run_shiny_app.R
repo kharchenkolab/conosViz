@@ -1,5 +1,7 @@
 #' @import shiny
 #' @import ggplot2
+#' @import heatmaply
+#' @import plotly
 #' @import dendextend
 #' @import conos
 NULL
@@ -314,16 +316,11 @@ getGreedyCutGroups <- function(n.clusters=NULL,greedy.modularity.cut.result=NULL
 ##' @param flat.cut whether to use a flat cut instead of a dynamic one
 ##' @export
 conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tissue_factors=NULL, minsize=0, minbreadth=0, flat.cut=TRUE) {
-  if (!requireNamespace("shinycssloaders", quietly = TRUE)) {
-    stop("Package 'shinycssloaders' is required to run shiny app")
-  }
 
-  if (!requireNamespace("d3heatmap", quietly = TRUE)) {
-    stop("Package 'd3heatmap' is required to run shiny app")
+  if (is.null(con$clusters$walktrap)){
+    stop("Please run findCommunities(method=walktrap.communities) to calculate walktrap clustering first")
   }
-
-  if(is.null(con$clusters$walktrap)) stop("Please run findCommunities(method=walktrap.communities) to calculate walktrap clustering first")
-  if(is.null(leaf.labels)) {
+  if (is.null(leaf.labels)) {
     # get sample labels for cells
     cl <- lapply(con$samples, conos:::getCellNames)
     leaf.labels <- as.factor(setNames(rep(1:length(cl),unlist(lapply(cl,length))),unlist(cl)))
@@ -630,32 +627,32 @@ conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tiss
       text(xy_ordered[mask,1]+0.5, xy_ordered[mask,2]+0.5, labels=xy_ordered[mask,3], col="black",cex = 0.8)
     },width = reactive(input$dimension[1]*2/3), height = reactive(input$dimension[2]*0.80)) #0.85
 
-    output$heatmap1 <- d3heatmap::renderD3heatmap({
+    output$heatmap1 <- plotly::renderPlotly({
       struct_similarity <- dataInput()$structure_vectors
       if (is.null(click_value()) & is.null(db_click_value())){
         Rowv <- dataInput()$dend.cut
-        d3heatmap::d3heatmap(t(struct_similarity),colors = reds_palette(10),Rowv=Rowv, dendrogram = "column" )}
-      else{
-        d3heatmap::d3heatmap(t(struct_similarity),colors = reds_palette(10), dendrogram = "column" )}
+        heatmaply::heatmaply(t(struct_similarity),colors = reds_palette(10),Rowv=Rowv, dendrogram = "column" )
+      } else{
+        heatmaply::heatmaply(t(struct_similarity),colors = reds_palette(10), dendrogram = "column" )}
     })
 
     output$treePlot3 <- renderUI({
-      d3heatmap::d3heatmapOutput("heatmap1", height = paste0(as.character(input$dimension[2]*0.9), "px"), width = paste0(as.character(input$dimension[1]*2/3), "px"))
+      plotly::plotlyOutput("heatmap1", height = paste0(as.character(input$dimension[2]*0.9), "px"), width = paste0(as.character(input$dimension[1]*2/3), "px"))
     })
 
-    output$heatmap2 <- d3heatmap::renderD3heatmap({
+    output$heatmap2 <- plotly::renderPlotly({
       struct_similarity <- dataInput()$structure_vectors
       dists <- dist(t(struct_similarity))
       if (is.null(click_value()) & is.null(db_click_value())){
         Rowv <- dataInput()$dend.cut
-        d3heatmap::d3heatmap(dists,colors = rev(reds_palette((max(dists))%/%0.1)),Rowv=Rowv,Colv=Rowv)}
-      else{
-        d3heatmap::d3heatmap(dists,colors = rev(reds_palette((max(dists))%/%0.1)),dendrogram = "none")
+        heatmaply::heatmaply(dists,colors = rev(reds_palette((max(dists))%/%0.1)),Rowv=Rowv,Colv=Rowv)
+      } else{
+        heatmaply::heatmaply(dists,colors = rev(reds_palette((max(dists))%/%0.1)),dendrogram = "none")
       }
     })
 
     output$treePlot4 <- renderUI({
-      d3heatmap::d3heatmapOutput("heatmap2", height = paste0(input$dimension[2]*0.9, "px"), width = paste0(input$dimension[1]*2/3, "px"))
+      plotly::plotlyOutput("heatmap2", height = paste0(input$dimension[2]*0.9, "px"), width = paste0(input$dimension[1]*2/3, "px"))
     })
 
     output$treePlot5 <- renderPlot({
