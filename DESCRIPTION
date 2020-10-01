@@ -9,7 +9,6 @@ License: GPL3
 biocViews:
 Imports:
     conos,
-    d3heatmap,
     dendextend,
     ggplot2,
     heatmaply,
