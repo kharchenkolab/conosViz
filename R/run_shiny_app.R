@@ -689,7 +689,7 @@ conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tiss
     })
 
     output$txt <- renderText({
-      if(is.null(input$plot_hover)){ return("Hover a cluster\n")}
+      if(is.null(input$plot_hover)){ return("Hover over a cluster\n")}
       else{
         euc_dist <- (xy_ordered[,1]-input$plot_hover$x)^2 + (xy_ordered[,2]-input$plot_hover$y)^2
         ID <- xy_ordered[which(euc_dist==min(euc_dist)),3]
