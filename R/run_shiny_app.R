@@ -1,7 +1,8 @@
 #' @import shiny
 #' @import ggplot2
 #' @import heatmaply
-#' @import plotly
+#' @importFrom plotly renderPlotly
+#' @importFrom plotly plotlyOutput
 #' @import dendextend
 #' @import conos
 NULL
@@ -627,7 +628,7 @@ conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tiss
       text(xy_ordered[mask,1]+0.5, xy_ordered[mask,2]+0.5, labels=xy_ordered[mask,3], col="black",cex = 0.8)
     },width = reactive(input$dimension[1]*2/3), height = reactive(input$dimension[2]*0.80)) #0.85
 
-    output$heatmap1 <- plotly::renderPlotly({
+    output$heatmap1 <- renderPlotly({
       struct_similarity <- dataInput()$structure_vectors
       if (is.null(click_value()) & is.null(db_click_value())){
         Rowv <- dataInput()$dend.cut
@@ -637,10 +638,10 @@ conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tiss
     })
 
     output$treePlot3 <- renderUI({
-      plotly::plotlyOutput("heatmap1", height = paste0(as.character(input$dimension[2]*0.9), "px"), width = paste0(as.character(input$dimension[1]*2/3), "px"))
+      plotlyOutput("heatmap1", height = paste0(as.character(input$dimension[2]*0.9), "px"), width = paste0(as.character(input$dimension[1]*2/3), "px"))
     })
 
-    output$heatmap2 <- plotly::renderPlotly({
+    output$heatmap2 <- renderPlotly({
       struct_similarity <- dataInput()$structure_vectors
       dists <- dist(t(struct_similarity))
       if (is.null(click_value()) & is.null(db_click_value())){
@@ -652,7 +653,7 @@ conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tiss
     })
 
     output$treePlot4 <- renderUI({
-      plotly::plotlyOutput("heatmap2", height = paste0(input$dimension[2]*0.9, "px"), width = paste0(input$dimension[1]*2/3, "px"))
+      plotlyOutput("heatmap2", height = paste0(input$dimension[2]*0.9, "px"), width = paste0(input$dimension[1]*2/3, "px"))
     })
 
     output$treePlot5 <- renderPlot({
