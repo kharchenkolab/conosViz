@@ -1,3 +1,6 @@
+[![Build Status](https://api.travis-ci.com/kharchenkolab/conosViz.svg?branch=master)](https://travis-ci.com/github/kharchenkolab/conosViz)
+
+
 # conosViz
 
 Shiny application to interactively visualize [Conos](https://github.com/kharchenkolab/conos) results. Users can visualize dendrograms of the hierarchical community structure of clusters calculated from walktrap clustering. Interactive heatmaps allow users to explore the composition of clusters, similarity of the cluster compositions, and related tSNE plots.
