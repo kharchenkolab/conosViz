@@ -319,7 +319,7 @@ getGreedyCutGroups <- function(n.clusters=NULL,greedy.modularity.cut.result=NULL
 conosShinyApp <- function(con, N=30, leaf.labels=NULL, tissue_mapping=NULL, tissue_factors=NULL, minsize=0, minbreadth=0, flat.cut=TRUE) {
 
   if (is.null(con$clusters$walktrap)){
-    stop("Please run findCommunities(method=walktrap.communities) to calculate walktrap clustering first")
+    stop("Please run findCommunities(method=igraph::walktrap.community) to calculate walktrap clustering first")
   }
   if (is.null(leaf.labels)) {
     # get sample labels for cells
